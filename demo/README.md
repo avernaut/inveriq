@@ -224,3 +224,22 @@ Do not add new functionality to the demo immediately before the event. The publi
 **INVERIQ by Avernaut**  
 Verified Autonomous Defense  
 **AI decides. INVERIQ verifies.**
+
+
+## Measurement and evidence
+
+Every completed run records a JSON report and appends one row to:
+
+```text
+.demo-state/reports/runs.csv
+```
+
+View aggregate results with:
+
+```bash
+python scripts/metrics_summary.py
+```
+
+The Expo dashboard displays the most recent closed-loop latency, attack reduction, availability and blast radius automatically.
+
+> Do not present v0.6.0 generated telemetry as an external benchmark. The current release establishes the measurement pipeline; production-quality benchmark claims require direct testbed counters.

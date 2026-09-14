@@ -176,3 +176,8 @@ demo/run_demo.sh --keep-lab
 ## Expo demo
 
 See [`demo/README.md`](demo/README.md) for the complete live-demo runbook and v0.5.0 scenario commands.
+
+
+## Measurement & Evidence
+
+INVERIQ v0.6.0 records per-run latency, mitigation effectiveness, availability and blast-radius evidence. See [`docs/V0.6.0.md`](docs/V0.6.0.md).

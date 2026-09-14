@@ -129,3 +129,30 @@ def console() -> None:
 
 
 console()
+
+
+# --- v0.6.0 Measurement & Evidence ---
+try:
+    import csv
+    from pathlib import Path
+    reports_csv = Path(".demo-state/reports/runs.csv")
+    st.markdown("---")
+    st.subheader("Measurement & Evidence")
+    if reports_csv.exists():
+        with reports_csv.open(newline="") as f:
+            rows = list(csv.DictReader(f))
+        if rows:
+            latest = rows[-1]
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("Closed-loop response", f"{float(latest['total_response_latency_ms']):.0f} ms")
+            c2.metric("Attack reduction", f"{float(latest['attack_reduction_pct']):.1f}%")
+            c3.metric("Availability", f"{float(latest['availability_pct']):.1f}%")
+            c4.metric("Blast radius", f"{float(latest['blast_radius_pct']):.2f}%")
+            st.caption(f"Latest measured run: {latest['scenario']} · {latest['run_id']}")
+            st.dataframe(rows[-10:], use_container_width=True)
+        else:
+            st.info("No measured demo runs yet.")
+    else:
+        st.info("Run the demo to generate evidence reports.")
+except Exception as exc:
+    st.warning(f"Metrics panel unavailable: {exc}")

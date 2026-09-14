@@ -140,6 +140,8 @@ write_state "post-verification" "Checking mitigation effectiveness and trusted c
 python scripts/lab_status.py
 write_state "complete" "Attack mitigated; protected service remains available"
 
+python scripts/measure_run.py --scenario "$SCENARIO" --unsafe-rejected --verified-executed
+
 banner "Demo complete"
 echo "AI decides. INVERIQ verifies."
 if [ "$KEEP_LAB" -eq 1 ]; then
