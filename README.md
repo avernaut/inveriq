@@ -1,9 +1,7 @@
 <p align="center">
-  <img src="assets/inveriq-logo.png" alt="Avernaut" width="120" />
-  <img src="assets/avernaut-logo.png" alt="Avernaut" width="120" />  
+  <img src="assets/inveriq-logo.png" alt="INVERIQ" width="120" />
 </p>
 
-<h1 align="center">INVERIQ</h1>
 <p align="center"><strong>Verified Autonomous Defense</strong></p>
 <p align="center"><em>AI decides. INVERIQ verifies.</em></p>
 
