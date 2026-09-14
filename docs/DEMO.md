@@ -1,20 +1,15 @@
-# IoT Tech Expo Demo
+# INVERIQ Expo Demo — v0.2.0
 
-## Primary scenario
+## Goal
+Demonstrate why autonomous cyber response needs a deterministic verification gate.
 
-Credential brute-force attack against an IoT authentication service.
+## Flow
+1. A synthetic credential brute-force event is detected and mapped to MITRE ATT&CK T1110.
+2. INVERIQ generates three deterministic response candidates.
+3. V1-V6 verification rejects the broad unsafe block and verifies safer alternatives.
+4. The candidate with the smallest estimated blast radius is selected.
+5. The nftables adapter renders an enforcement preview; v0.2 does not execute it.
+6. Offline-safe post-verification counters demonstrate threat reduction and preserved service availability.
 
-## Story
-
-1. Legitimate traffic is continuously generated.
-2. An attacker starts a brute-force sequence.
-3. INVERIQ identifies the event as credential brute force and maps it to MITRE ATT&CK T1110.
-4. The response engine proposes multiple candidate mitigations.
-5. A broad subnet block stops the attack but fails reachability, availability, and blast-radius checks, so INVERIQ rejects it.
-6. A source-specific block or rate limit passes all checks.
-7. INVERIQ enforces the verified action with `nftables`.
-8. Post-verification confirms threat reduction while legitimate service remains operational.
-
-## Closing line
-
-**Both actions can stop the attack. Only one is safe. INVERIQ knows the difference.**
+## Safety
+The v0.2 public demo does not launch hostile traffic and does not alter host firewall state. This makes the demo repeatable, offline-capable, and suitable for development laptops. Real isolated enforcement belongs to a later testbed-only milestone.

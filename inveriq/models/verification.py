@@ -13,3 +13,15 @@ class VerificationResult(BaseModel):
     blast_radius: Status
     effectiveness: Status
     decision: Literal["VERIFIED", "REJECTED"]
+
+
+class PostVerificationResult(BaseModel):
+    candidate: str
+    attack_rate_before: float
+    attack_rate_after: float
+    legitimate_rate_before: float
+    legitimate_rate_after: float
+    critical_service_up: bool
+    threat_reduction: float
+    availability: float
+    result: Literal["PASS", "FAIL"]

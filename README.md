@@ -120,3 +120,18 @@ This repository contains proprietary work in development. No license is granted 
 **Avernaut**  
 https://avernaut.com  
 contact@avernaut.com
+
+## v0.2.0 — Expo MVP foundation
+
+The v0.2.0 branch adds GitHub CI/security workflows, issue and PR templates, an
+end-to-end offline-safe brute-force verification scenario, enforcement preview,
+and post-mitigation verification metrics. Verification decisions remain
+deterministic and no generated command is executed by the application.
+
+Run locally:
+
+```bash
+docker compose up --build
+```
+
+Then open `http://localhost:8501`.
