@@ -196,3 +196,8 @@ INVERIQ v0.8.0 measures mitigation effectiveness using real traffic generated in
 ## Expo Release Candidate
 
 INVERIQ v0.9.0 is the feature-frozen IoT Tech Expo release candidate. See [`docs/V0.9.0.md`](docs/V0.9.0.md) and [`docs/EXPO_FREEZE.md`](docs/EXPO_FREEZE.md).
+
+
+## IoT Tech Expo Readiness
+
+Operational demo material is available in [`expo/`](expo/README.md), including the 90-second pitch, booth setup, fallback plan, backup-video storyboard, checklist, and one-page overview.
