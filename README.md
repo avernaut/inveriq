@@ -186,3 +186,8 @@ INVERIQ v0.6.0 records per-run latency, mitigation effectiveness, availability a
 ## Real Testbed Instrumentation
 
 INVERIQ v0.7.0 collects live Docker-lab timing, service-health and nftables evidence. See [`docs/V0.7.0.md`](docs/V0.7.0.md).
+
+
+## Real Traffic Effectiveness
+
+INVERIQ v0.8.0 measures mitigation effectiveness using real traffic generated inside the isolated lab. See [`docs/V0.8.0.md`](docs/V0.8.0.md).

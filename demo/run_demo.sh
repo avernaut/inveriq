@@ -145,6 +145,9 @@ write_state "complete" "Attack mitigated; protected service remains available"
 
 python scripts/measure_run.py --scenario "$SCENARIO" --unsafe-rejected --verified-executed
 
+banner "Measured effectiveness"
+python scripts/benchmark_effectiveness.py --scenario "$SCENARIO" --count 20 || true
+
 banner "Demo complete"
 echo "AI decides. INVERIQ verifies."
 if [ "$KEEP_LAB" -eq 1 ]; then

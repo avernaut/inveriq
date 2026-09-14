@@ -267,3 +267,27 @@ Real reports are stored in:
 ```
 
 These values are suitable for internal engineering evidence. External benchmark claims should still be based on repeated runs and packet-level scenario instrumentation.
+
+
+## Real traffic effectiveness
+
+Generate scenario traffic directly:
+
+```bash
+python scripts/traffic_generator.py --scenario brute-force --count 40
+```
+
+Measure mitigation effectiveness end-to-end:
+
+```bash
+python scripts/benchmark_effectiveness.py --scenario brute-force
+```
+
+The results are stored in:
+
+```text
+.demo-state/reports/effectiveness.csv
+.demo-state/reports/<run-id>-effectiveness.json
+```
+
+The dashboard automatically displays the latest measured attack-rate reduction, attack success before/after, and trusted-service availability.

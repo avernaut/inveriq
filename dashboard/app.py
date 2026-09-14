@@ -183,3 +183,30 @@ try:
         st.info("Run scripts/benchmark_real.py to collect real lab evidence.")
 except Exception as exc:
     st.warning(f"Real instrumentation unavailable: {exc}")
+
+
+# --- v0.8.0 Real Traffic Effectiveness ---
+try:
+    import csv
+    from pathlib import Path
+    eff_csv = Path(".demo-state/reports/effectiveness.csv")
+    st.markdown("---")
+    st.subheader("Real Traffic Effectiveness")
+    if eff_csv.exists():
+        with eff_csv.open(newline="") as f:
+            eff_rows = list(csv.DictReader(f))
+        if eff_rows:
+            r = eff_rows[-1]
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("Attack rate reduction", f"{float(r['attack_rate_reduction_pct']):.1f}%")
+            c2.metric("Attack success before", f"{float(r['attack_success_before_pct']):.1f}%")
+            c3.metric("Attack success after", f"{float(r['attack_success_after_pct']):.1f}%")
+            c4.metric("Availability", f"{float(r['availability_pct']):.0f}%")
+            st.caption(f"Measured traffic run: {r['scenario']} · {r['run_id']}")
+            st.dataframe(eff_rows[-10:], use_container_width=True)
+        else:
+            st.info("No effectiveness runs recorded yet.")
+    else:
+        st.info("Run scripts/benchmark_effectiveness.py to collect real traffic evidence.")
+except Exception as exc:
+    st.warning(f"Effectiveness panel unavailable: {exc}")
