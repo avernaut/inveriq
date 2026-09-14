@@ -99,6 +99,8 @@ write_state "normal" "Trusted traffic is healthy before the attack"
 python scripts/lab_status.py
 pause
 
+python scripts/collect_instrumentation.py --label pre >/dev/null || true
+
 banner "Attack detected"
 write_state "attack" "Synthetic attack active: $SCENARIO"
 python demo/scenario.py --scenario "$SCENARIO"
@@ -138,6 +140,7 @@ pause
 banner "Post-verification"
 write_state "post-verification" "Checking mitigation effectiveness and trusted connectivity"
 python scripts/lab_status.py
+python scripts/collect_instrumentation.py --label post >/dev/null || true
 write_state "complete" "Attack mitigated; protected service remains available"
 
 python scripts/measure_run.py --scenario "$SCENARIO" --unsafe-rejected --verified-executed

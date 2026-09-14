@@ -181,3 +181,8 @@ See [`demo/README.md`](demo/README.md) for the complete live-demo runbook and v0
 ## Measurement & Evidence
 
 INVERIQ v0.6.0 records per-run latency, mitigation effectiveness, availability and blast-radius evidence. See [`docs/V0.6.0.md`](docs/V0.6.0.md).
+
+
+## Real Testbed Instrumentation
+
+INVERIQ v0.7.0 collects live Docker-lab timing, service-health and nftables evidence. See [`docs/V0.7.0.md`](docs/V0.7.0.md).

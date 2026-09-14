@@ -1,6 +1,6 @@
 [project]
 name = "inveriq"
-version = "0.6.0"
+version = "0.7.0"
 description = "Verified autonomous cyber defense for IoT, Edge, and Cloud."
 requires-python = ">=3.12"
 

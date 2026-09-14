@@ -156,3 +156,30 @@ try:
         st.info("Run the demo to generate evidence reports.")
 except Exception as exc:
     st.warning(f"Metrics panel unavailable: {exc}")
+
+
+# --- v0.7.0 Real Testbed Instrumentation ---
+try:
+    import csv
+    from pathlib import Path
+    real_csv = Path(".demo-state/reports/runs-real.csv")
+    st.markdown("---")
+    st.subheader("Real Testbed Instrumentation")
+    if real_csv.exists():
+        with real_csv.open(newline="") as f:
+            real_rows = list(csv.DictReader(f))
+        if real_rows:
+            r = real_rows[-1]
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("Detection", f"{float(r['detection_latency_ms']):.1f} ms")
+            c2.metric("Verification", f"{float(r['verification_latency_ms']):.3f} ms")
+            c3.metric("Enforcement", f"{float(r['enforcement_latency_ms']):.1f} ms")
+            c4.metric("Availability", f"{float(r['availability_pct']):.0f}%")
+            st.caption(f"Real lab run: {r['scenario']} · {r['run_id']}")
+            st.dataframe(real_rows[-10:], use_container_width=True)
+        else:
+            st.info("No real benchmark runs recorded yet.")
+    else:
+        st.info("Run scripts/benchmark_real.py to collect real lab evidence.")
+except Exception as exc:
+    st.warning(f"Real instrumentation unavailable: {exc}")

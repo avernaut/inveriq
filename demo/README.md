@@ -243,3 +243,27 @@ python scripts/metrics_summary.py
 The Expo dashboard displays the most recent closed-loop latency, attack reduction, availability and blast radius automatically.
 
 > Do not present v0.6.0 generated telemetry as an external benchmark. The current release establishes the measurement pipeline; production-quality benchmark claims require direct testbed counters.
+
+
+## Real testbed instrumentation
+
+INVERIQ v0.7.0 can collect live measurements directly from the Docker lab:
+
+```bash
+python scripts/collect_instrumentation.py --label snapshot
+```
+
+Run a complete measured cycle:
+
+```bash
+python scripts/benchmark_real.py --scenario brute-force
+```
+
+Real reports are stored in:
+
+```text
+.demo-state/reports/runs-real.csv
+.demo-state/reports/<run-id>-real.json
+```
+
+These values are suitable for internal engineering evidence. External benchmark claims should still be based on repeated runs and packet-level scenario instrumentation.
