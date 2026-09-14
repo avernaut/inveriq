@@ -1,53 +1,131 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
 import requests
 import streamlit as st
 
-st.set_page_config(page_title="INVERIQ", layout="wide")
-st.title("INVERIQ")
-st.caption("Verified Autonomous Defense — AI decides. INVERIQ verifies.")
-st.info("Expo MVP v0.2 runs in offline-safe mode: verification is real; hostile traffic and enforcement are simulated/previewed.")
+from inveriq.detection.detector import demo_bruteforce_event
+from inveriq.intent.policy import load_policy
+from inveriq.response.generator import generate_candidates
+from inveriq.verification.engine import verify
 
-if st.button("Run Brute Force Verification Demo", type="primary"):
-    data = requests.get("http://api:8000/demo/bruteforce", timeout=5).json()
-    threat = data["threat"]
+STATE_FILE = Path(".demo-state.json")
+METRICS_URL = "http://127.0.0.1:18080/metrics"
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Threat", "Brute Force")
-    c2.metric("MITRE", threat["mitre"])
-    c3.metric("Confidence", f"{threat['confidence'] * 100:.0f}%")
-    c4.metric("Severity", threat["severity"])
+st.set_page_config(page_title="INVERIQ — Expo Console", page_icon="🛡️", layout="wide")
 
-    st.subheader("Verification Gate")
+st.markdown(
+    """
+<style>
+.block-container {padding-top: 1.4rem; padding-bottom: 2rem; max-width: 1500px;}
+[data-testid="stMetric"] {border: 1px solid rgba(128,128,128,.20); border-radius: 12px; padding: 12px;}
+.hero {font-size: 2.35rem; font-weight: 800; margin-bottom: .15rem;}
+.subhero {font-size: 1.05rem; opacity: .72; margin-bottom: 1.2rem;}
+.stage {padding: .65rem 1rem; border-radius: 10px; background: rgba(70,130,180,.12); font-weight: 650;}
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+
+def read_state() -> dict:
+    default = {"stage": "READY", "message": "Run demo/run_demo.sh", "candidate": None, "decision": None}
+    try:
+        return {**default, **json.loads(STATE_FILE.read_text())}
+    except (FileNotFoundError, json.JSONDecodeError):
+        return default
+
+
+def live_metrics() -> dict:
+    try:
+        return requests.get(METRICS_URL, timeout=0.6).json()
+    except requests.RequestException:
+        return {"total": 0, "login": 0, "health": 0, "requests_per_second": 0.0, "status": "offline"}
+
+
+def verification_rows() -> tuple[list[dict], dict | None]:
+    threat = demo_bruteforce_event()
+    policy = load_policy()
     rows = []
-    by_id = {c["id"]: c for c in data["candidates"]}
-    for result in data["verification"]:
-        candidate = by_id[result["candidate"]]
+    selected = None
+    for candidate in generate_candidates(threat):
+        result = verify(candidate, threat, policy)
         rows.append({
-            "Candidate": candidate["id"],
-            "Action": candidate["action"],
-            "Source": candidate["source"],
-            "Authorization": result["authorization"],
-            "Target": result["target"],
-            "Reachability": result["reachability"],
-            "Availability": result["availability"],
-            "Blast Radius": result["blast_radius"],
-            "Effectiveness": result["effectiveness"],
-            "Decision": result["decision"],
+            "Candidate": candidate.id,
+            "Action": candidate.action,
+            "V1 Auth": result.authorization,
+            "V2 Target": result.target,
+            "V3 Reach": result.reachability,
+            "V4 Avail": result.availability,
+            "V5 Blast": result.blast_radius,
+            "V6 Effect": result.effectiveness,
+            "Decision": result.decision,
+            "Blast %": round(candidate.estimated_blast_radius * 100, 2),
         })
-    st.dataframe(rows, use_container_width=True, hide_index=True)
+        if result.decision == "VERIFIED" and (selected is None or candidate.estimated_blast_radius < selected.estimated_blast_radius):
+            selected = candidate
+    return rows, selected
 
-    selected = data.get("selected")
-    if selected:
-        st.success(f"VERIFIED TO EXECUTE: {selected['action']} on {selected['source']}")
-        st.caption("Enforcement preview (not executed in v0.2)")
-        st.code(data["enforcement"]["command"], language="bash")
 
-        post = data["post_verification"]
-        st.subheader("Post-verification")
-        p1, p2, p3 = st.columns(3)
-        p1.metric("Threat reduction", f"{post['threat_reduction'] * 100:.1f}%")
-        p2.metric("Service availability", f"{post['availability'] * 100:.1f}%")
-        p3.metric("Result", post["result"])
-        st.caption(
-            f"Attack requests/s: {post['attack_rate_before']:.0f} → {post['attack_rate_after']:.0f} | "
-            f"Legitimate requests/s: {post['legitimate_rate_before']:.0f} → {post['legitimate_rate_after']:.0f}"
+st.markdown('<div class="hero">INVERIQ</div>', unsafe_allow_html=True)
+st.markdown('<div class="subhero">Verified Autonomous Defense · AI decides. INVERIQ verifies. · by AVERNAUT</div>', unsafe_allow_html=True)
+
+
+@st.fragment(run_every="1s")
+def console() -> None:
+    state = read_state()
+    metrics = live_metrics()
+    threat = demo_bruteforce_event()
+    rows, selected = verification_rows()
+
+    st.markdown(f'<div class="stage">{state["stage"]} — {state["message"]}</div>', unsafe_allow_html=True)
+    st.write("")
+
+    c1, c2, c3, c4, c5 = st.columns(5)
+    c1.metric("System", "ONLINE" if metrics.get("status") != "offline" else "OFFLINE")
+    c2.metric("Threat", "BRUTE FORCE" if state["stage"] not in {"READY", "SETUP", "BASELINE"} else "NONE")
+    c3.metric("MITRE", threat.mitre)
+    c4.metric("Confidence", f"{threat.confidence * 100:.0f}%")
+    c5.metric("Lab req/s", f"{metrics.get('requests_per_second', 0):.1f}")
+
+    left, right = st.columns([1.25, 1])
+    with left:
+        st.subheader("Verification Gate")
+        st.dataframe(rows, use_container_width=True, hide_index=True)
+    with right:
+        st.subheader("Decision")
+        if state.get("decision") == "REJECTED":
+            st.error(f"REJECTED — {state.get('candidate', 'unsafe action')}")
+            st.caption("Stops the attack, but violates one or more operational invariants.")
+        elif state.get("decision") == "VERIFIED":
+            st.success(f"VERIFIED — {state.get('candidate', selected.id if selected else 'safe action')}")
+            st.caption("Eligible for enforcement inside the isolated lab gateway.")
+        elif selected:
+            st.info(f"Lowest-blast-radius verified candidate: {selected.id}")
+
+        st.subheader("Protected topology")
+        st.code(
+            "Attacker 10.77.0.50\n"
+            "        │\n"
+            "        ▼\n"
+            "INVERIQ Gateway 10.77.0.10 ── Protected Auth API\n"
+            "        ▲\n"
+            "        │\n"
+            "Trusted Client 10.77.0.60",
+            language=None,
         )
+
+    st.subheader("Live lab telemetry")
+    t1, t2, t3, t4 = st.columns(4)
+    t1.metric("Total requests", metrics.get("total", 0))
+    t2.metric("Login attempts", metrics.get("login", 0))
+    t3.metric("Trusted health checks", metrics.get("health", 0))
+    t4.metric("Selected blast radius", f"{(selected.estimated_blast_radius * 100 if selected else 0):.2f}%")
+
+    if state["stage"] == "COMPLETE":
+        st.success("Attack mitigated. Trusted service remains reachable. Demo reset completed.")
+
+
+console()

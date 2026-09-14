@@ -159,3 +159,15 @@ python scripts/lab_status.py
 ```
 
 See [`docs/LAB.md`](docs/LAB.md) for the full workflow and safety boundary.
+
+## Expo demo launcher (v0.4)
+
+The complete isolated demonstration can now be run as a single scripted flow:
+
+```bash
+streamlit run dashboard/app.py
+# second terminal
+demo/run_demo.sh --keep-lab
+```
+
+`demo/run_demo.sh` drives the presentation stages, intentionally demonstrates rejection of `MIT-UNSAFE`, enforces only the verified `MIT-RATE` action inside `inveriq-gateway`, performs post-verification, and resets the lab. See [`docs/DEMO.md`](docs/DEMO.md).

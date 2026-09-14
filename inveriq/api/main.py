@@ -7,12 +7,12 @@ from inveriq.postverify.engine import simulate_post_verification
 from inveriq.response.generator import generate_candidates
 from inveriq.verification.engine import verify
 
-app = FastAPI(title="INVERIQ API", version="0.2.0")
+app = FastAPI(title="INVERIQ API", version="0.4.0")
 
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "product": "INVERIQ", "version": "0.2.0"}
+    return {"status": "ok", "product": "INVERIQ", "version": "0.4.0"}
 
 
 @app.get("/demo/bruteforce")
