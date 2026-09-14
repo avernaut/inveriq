@@ -291,3 +291,40 @@ The results are stored in:
 ```
 
 The dashboard automatically displays the latest measured attack-rate reduction, attack success before/after, and trusted-service availability.
+
+
+## Expo Release Candidate
+
+Run the release-candidate validation flow:
+
+```bash
+demo/run_expo_rc.sh brute-force
+```
+
+This performs real instrumentation, real traffic-effectiveness measurement, aggregate statistics, and report export.
+
+Reliability testing:
+
+```bash
+python scripts/reliability_test.py --scenario brute-force --runs 100
+```
+
+Aggregate measured results with 95% confidence intervals:
+
+```bash
+python scripts/aggregate_stats.py
+```
+
+Inject a safe lab failure:
+
+```bash
+python scripts/failure_injection.py --mode gateway-restart
+```
+
+Export the current engineering report:
+
+```bash
+python scripts/export_expo_report.py
+```
+
+The feature-freeze policy is documented in `docs/EXPO_FREEZE.md`.

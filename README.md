@@ -191,3 +191,8 @@ INVERIQ v0.7.0 collects live Docker-lab timing, service-health and nftables evid
 ## Real Traffic Effectiveness
 
 INVERIQ v0.8.0 measures mitigation effectiveness using real traffic generated inside the isolated lab. See [`docs/V0.8.0.md`](docs/V0.8.0.md).
+
+
+## Expo Release Candidate
+
+INVERIQ v0.9.0 is the feature-frozen IoT Tech Expo release candidate. See [`docs/V0.9.0.md`](docs/V0.9.0.md) and [`docs/EXPO_FREEZE.md`](docs/EXPO_FREEZE.md).
