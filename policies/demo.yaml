@@ -1,0 +1,18 @@
+intent:
+  name: protect-iot-authentication
+  protect:
+    - authentication-api
+  requirements:
+    preserve_availability: true
+    preserve_critical_connectivity: true
+  constraints:
+    max_blast_radius: 0.05
+    max_block_duration: 600
+  trusted_networks:
+    - 10.0.2.0/24
+  permitted_actions:
+    - RATE_LIMIT_SOURCE
+    - BLOCK_SOURCE
+    - ISOLATE_DEVICE
+  forbidden_actions:
+    - SHUTDOWN_SERVICE
