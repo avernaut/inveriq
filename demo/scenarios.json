@@ -1,0 +1,26 @@
+{
+  "brute-force": {
+    "name": "Credential Brute Force",
+    "mitre": "T1110",
+    "severity": "HIGH",
+    "confidence": 0.97,
+    "recommended": "MIT-RATE",
+    "description": "Repeated authentication attempts against the protected IoT API."
+  },
+  "ddos": {
+    "name": "Network Denial of Service",
+    "mitre": "T1498",
+    "severity": "CRITICAL",
+    "confidence": 0.96,
+    "recommended": "MIT-RATE",
+    "description": "Synthetic high-rate traffic intended to exhaust protected gateway resources."
+  },
+  "exfiltration": {
+    "name": "Exfiltration Over Alternative Protocol",
+    "mitre": "T1048",
+    "severity": "HIGH",
+    "confidence": 0.94,
+    "recommended": "MIT-BLOCK",
+    "description": "Synthetic outbound transfer pattern representing suspicious data exfiltration."
+  }
+}

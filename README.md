@@ -171,3 +171,8 @@ demo/run_demo.sh --keep-lab
 ```
 
 `demo/run_demo.sh` drives the presentation stages, intentionally demonstrates rejection of `MIT-UNSAFE`, enforces only the verified `MIT-RATE` action inside `inveriq-gateway`, performs post-verification, and resets the lab. See [`docs/DEMO.md`](docs/DEMO.md).
+
+
+## Expo demo
+
+See [`demo/README.md`](demo/README.md) for the complete live-demo runbook and v0.5.0 scenario commands.
