@@ -1,62 +1,122 @@
-# INVERIQ
+<p align="center">
+  <img src="assets/avernaut-logo.png" alt="Avernaut" width="120" />
+</p>
 
-**Verified Autonomous Defense**
+<h1 align="center">INVERIQ</h1>
+<p align="center"><strong>Verified Autonomous Defense</strong></p>
+<p align="center"><em>AI decides. INVERIQ verifies.</em></p>
 
-> AI decides. INVERIQ verifies.
+> **Private MVP repository — Avernaut**
 
-INVERIQ is an MVP for verifying AI-generated cybersecurity mitigation actions before they are enforced on IoT/Edge infrastructure.
+INVERIQ is a verified autonomous cyber-defense platform that validates AI-generated cybersecurity actions before safely enforcing them across IoT, Edge, Cloud, and OT infrastructures.
 
-## Core pipeline
+Its design principle is simple: **no AI-generated security action should reach infrastructure blindly.**
 
-Detect -> Decide -> Verify -> Defend -> Verify
+## Core control loop
 
-The Verification Engine checks six invariants before execution:
+**Detect → Decide → Verify → Defend → Verify**
 
-1. Authorization
-2. Target consistency
-3. Reachability
-4. Availability
-5. Blast radius
-6. Security effectiveness
+1. **Detect** anomalous or malicious activity.
+2. **Decide** on one or more candidate mitigations.
+3. **Verify** every candidate against explicit safety and operational invariants.
+4. **Defend** by enforcing only a verified mitigation.
+5. **Verify again** that the threat was reduced and legitimate service remains healthy.
 
-An action executes only if every mandatory verification returns `PASS`.
+## MVP verification gates
 
-## MVP scope
+The INVERIQ Verification Engine evaluates six deterministic gates before an action may execute:
 
-- Python 3.12
-- FastAPI backend
-- Streamlit dashboard
-- Docker Compose testbed
-- Linux/nftables enforcement adapter
-- YAML security intent/policy
-- Demo scenarios: brute force, DDoS, exfiltration
-- Offline-safe deterministic response mode
+| Gate | Verification | Core question |
+|---|---|---|
+| V1 | Authorization | Is the action permitted by policy? |
+| V2 | Target | Does the action match the observed evidence and intended target? |
+| V3 | Reachability | Will critical flows remain reachable? |
+| V4 | Availability | Will protected services remain available? |
+| V5 | Blast Radius | Is collateral impact within the configured threshold? |
+| V6 | Security Effectiveness | Is the action expected to reduce or stop the attack? |
 
-## Quick start
+Execution follows an all-gates rule:
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn inveriq.api.main:app --reload
+`EXECUTE ⇔ V1 ∧ V2 ∧ V3 ∧ V4 ∧ V5 ∧ V6`
+
+A failed gate rejects the candidate; verification is not an average score.
+
+## IoT Tech Expo Europe demo
+
+The MVP is designed around a short, reproducible demonstration:
+
+- normal IoT traffic is active;
+- a credential brute-force attack begins;
+- INVERIQ detects and maps the threat to MITRE ATT&CK;
+- multiple candidate mitigations are generated;
+- a deliberately unsafe candidate is rejected;
+- a safe candidate is verified and enforced through `nftables`;
+- post-verification confirms threat reduction and service continuity.
+
+Primary demo scenario: **Credential Brute Force / MITRE ATT&CK T1110**.
+
+Secondary scenarios: DDoS/resource exhaustion and data exfiltration.
+
+## Repository layout
+
+```text
+inveriq/
+├── inveriq/
+│   ├── api/
+│   ├── detection/
+│   ├── enforcement/
+│   ├── intent/
+│   ├── models/
+│   ├── response/
+│   ├── telemetry/
+│   └── verification/
+├── dashboard/
+├── demo/
+├── policies/
+├── topology/
+├── tests/
+├── docs/
+├── assets/
+├── docker-compose.yml
+└── requirements.txt
 ```
 
-In another terminal:
+## Technology stack
 
-```bash
-streamlit run dashboard/app.py
-```
+- Python
+- FastAPI
+- Streamlit
+- Docker / Docker Compose
+- Linux `nftables`
+- YAML/JSON policy definitions
+- MITRE ATT&CK mapping
+- ML/statistical threat detection
+- Optional LLM-based response generation behind deterministic verification
 
-Run tests:
+## Security architecture
 
-```bash
-pytest -q
-```
+The LLM, when enabled, never writes directly to the firewall or infrastructure. It may only produce structured mitigation candidates from a closed action vocabulary. The deterministic Verification Engine authorizes or rejects those candidates before a trusted adapter translates them into enforcement rules.
 
-## Demo concept
+This separation is deliberate:
 
-The demo intentionally generates multiple mitigation candidates. At least one candidate is unsafe but effective against the attack. INVERIQ rejects it because it violates operational invariants, then selects a verified alternative.
+`AI recommendation → structured action → deterministic verification → enforcement adapter`
 
-## Status
+## Development status
 
-`v0.1-prealpha` — IoT Tech Expo Europe 2026 MVP.
+**v0.1 — MVP foundation**
+
+Current repository contents establish the initial models, verification flow, policy representation, demo scenarios, dashboard skeleton, and enforcement adapter structure.
+
+The next milestone is **v0.2**, focused on an executable end-to-end Docker testbed with live traffic, brute-force detection, real pre/post verification, and repeatable offline demonstration.
+
+## Ownership and confidentiality
+
+Copyright © 2026 Avernaut. All rights reserved.
+
+This repository contains proprietary work in development. No license is granted to use, copy, modify, distribute, sublicense, or create derivative works unless explicitly authorized by Avernaut.
+
+## Contact
+
+**Avernaut**  
+https://avernaut.com  
+contact@avernaut.com
