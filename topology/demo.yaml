@@ -1,23 +1,14 @@
 nodes:
-  attacker:
-    ip: 10.0.1.50
-    role: untrusted
-  edge-gateway:
-    ip: 10.0.1.1
-    role: critical
-  iot-camera-01:
-    ip: 10.0.2.11
-    role: iot
-  iot-sensor-01:
-    ip: 10.0.2.12
-    role: iot
-  authentication-api:
-    ip: 10.0.2.20
+  gateway:
+    ip: 10.77.0.10
     role: critical-service
+  attacker:
+    ip: 10.77.0.50
+    role: untrusted
   trusted-client:
-    ip: 10.0.2.50
+    ip: 10.77.0.60
     role: trusted
 critical_flows:
   - source: trusted-client
-    destination: authentication-api
-    port: 443
+    destination: gateway
+    port: 8080

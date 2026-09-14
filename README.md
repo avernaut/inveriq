@@ -103,11 +103,11 @@ This separation is deliberate:
 
 ## Development status
 
-**v0.1 — MVP foundation**
+**v0.3.0 — Isolated enforcement lab**
 
 Current repository contents establish the initial models, verification flow, policy representation, demo scenarios, dashboard skeleton, and enforcement adapter structure.
 
-The next milestone is **v0.2**, focused on an executable end-to-end Docker testbed with live traffic, brute-force detection, real pre/post verification, and repeatable offline demonstration.
+The current milestone adds an isolated Docker lab with synthetic live traffic and real `nftables` enforcement inside the lab gateway only. The host firewall is never modified by the INVERIQ demo tooling.
 
 ## Ownership and confidentiality
 
@@ -135,3 +135,27 @@ docker compose up --build
 ```
 
 Then open `http://localhost:8501`.
+
+
+## v0.3.0 — Isolated real-enforcement lab
+
+The v0.3.0 milestone introduces a dedicated Docker lab on `10.77.0.0/24`:
+
+- protected gateway/API: `10.77.0.10`;
+- synthetic attacker: `10.77.0.50`;
+- trusted client: `10.77.0.60`;
+- real `nftables` filtering inside the gateway container;
+- explicit `lab_mode` gate before a verified action becomes executable;
+- no host-firewall execution path.
+
+Start the isolated demo:
+
+```bash
+docker compose -f docker-compose.lab.yml up --build -d
+python scripts/lab_status.py
+python scripts/lab_enforce.py --candidate MIT-UNSAFE
+python scripts/lab_enforce.py --candidate MIT-RATE
+python scripts/lab_status.py
+```
+
+See [`docs/LAB.md`](docs/LAB.md) for the full workflow and safety boundary.

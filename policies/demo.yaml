@@ -9,7 +9,7 @@ intent:
     max_blast_radius: 0.05
     max_block_duration: 600
   trusted_networks:
-    - 10.0.2.0/24
+    - 10.77.0.60/32
   permitted_actions:
     - RATE_LIMIT_SOURCE
     - BLOCK_SOURCE

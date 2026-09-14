@@ -6,7 +6,7 @@ def demo_bruteforce_event() -> ThreatEvent:
         id="THR-001",
         attack="credential_brute_force",
         mitre="T1110",
-        source="10.0.1.50",
+        source="10.77.0.50",
         target="authentication-api",
         confidence=0.97,
         severity="HIGH",

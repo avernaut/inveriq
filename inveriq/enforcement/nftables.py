@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from inveriq.models.mitigation import MitigationCandidate
 
+TABLE = "inveriq"
+CHAIN = "input"
+
 
 @dataclass(frozen=True)
 class EnforcementPlan:
@@ -10,25 +13,22 @@ class EnforcementPlan:
 
 
 def render_nftables(candidate: MitigationCandidate) -> str:
-    """Render a Linux nftables command without executing it."""
+    """Render a command for the isolated INVERIQ lab nftables table."""
+    prefix = f"nft add rule inet {TABLE} {CHAIN} ip saddr {candidate.source}"
     if candidate.action == "BLOCK_SOURCE":
-        return f"nft add rule inet filter input ip saddr {candidate.source} drop"
+        return f"{prefix} drop comment \"INVERIQ:{candidate.id}\""
     if candidate.action == "RATE_LIMIT_SOURCE":
+        # Keep legitimate sources untouched; packets above the per-source rate are dropped.
         return (
-            "nft add rule inet filter input "
-            f"ip saddr {candidate.source} limit rate 10/second accept"
+            f"{prefix} limit rate over 10/second drop "
+            f"comment \"INVERIQ:{candidate.id}\""
         )
     if candidate.action == "ISOLATE_DEVICE":
         return f"# isolate {candidate.target} using a deployment-specific adapter"
     return "# no enforcement adapter available"
 
 
-def build_plan(candidate: MitigationCandidate, verified: bool) -> EnforcementPlan:
-    """Build an enforcement plan only for a verified candidate.
-
-    v0.2 deliberately remains preview-only: the command is never executed by
-    the application. Real enforcement will require an isolated demo namespace
-    and an explicit adapter in a later version.
-    """
+def build_plan(candidate: MitigationCandidate, verified: bool, lab_mode: bool = False) -> EnforcementPlan:
     command = render_nftables(candidate) if verified else "# rejected by INVERIQ"
-    return EnforcementPlan(candidate.id, command, executable=False)
+    supported = candidate.action in {"BLOCK_SOURCE", "RATE_LIMIT_SOURCE"}
+    return EnforcementPlan(candidate.id, command, executable=bool(verified and lab_mode and supported))

@@ -1,15 +1,15 @@
-# INVERIQ Expo Demo — v0.2.0
+# IoT Tech Expo demo flow — v0.3
 
-## Goal
-Demonstrate why autonomous cyber response needs a deterministic verification gate.
+1. Start the isolated Docker lab.
+2. Show that the trusted client continuously reaches the protected service.
+3. Show synthetic high-rate authentication traffic from `10.77.0.50`.
+4. Create `ThreatEvent` for credential brute force / MITRE ATT&CK T1110.
+5. Generate three mitigation candidates.
+6. Run V1–V6 on each candidate.
+7. Show `MIT-UNSAFE` rejected because reachability, availability and blast-radius gates fail.
+8. Select `MIT-RATE` as the lowest-blast-radius verified candidate.
+9. Apply its nftables rule inside `inveriq-gateway` only.
+10. Verify threat reduction while the trusted health flow remains available.
+11. Reset the lab before the next demonstration.
 
-## Flow
-1. A synthetic credential brute-force event is detected and mapped to MITRE ATT&CK T1110.
-2. INVERIQ generates three deterministic response candidates.
-3. V1-V6 verification rejects the broad unsafe block and verifies safer alternatives.
-4. The candidate with the smallest estimated blast radius is selected.
-5. The nftables adapter renders an enforcement preview; v0.2 does not execute it.
-6. Offline-safe post-verification counters demonstrate threat reduction and preserved service availability.
-
-## Safety
-The v0.2 public demo does not launch hostile traffic and does not alter host firewall state. This makes the demo repeatable, offline-capable, and suitable for development laptops. Real isolated enforcement belongs to a later testbed-only milestone.
+Target speaking time: 90 seconds. Target full interactive demonstration: under 3 minutes.

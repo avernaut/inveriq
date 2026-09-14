@@ -1,0 +1,9 @@
+[project]
+name = "inveriq"
+version = "0.3.0"
+description = "Verified autonomous cyber defense for IoT, Edge, and Cloud."
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

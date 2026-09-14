@@ -1,0 +1,45 @@
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: lab/gateway/Dockerfile
+    container_name: inveriq-gateway
+    cap_add:
+      - NET_ADMIN
+    networks:
+      inveriq_lab:
+        ipv4_address: 10.77.0.10
+    ports:
+      - "18080:8080"
+
+  attacker:
+    build:
+      context: .
+      dockerfile: lab/attacker/Dockerfile
+    container_name: inveriq-attacker
+    environment:
+      ATTACK_DELAY: "0.05"
+    depends_on:
+      - gateway
+    networks:
+      inveriq_lab:
+        ipv4_address: 10.77.0.50
+
+  trusted:
+    build:
+      context: .
+      dockerfile: lab/trusted/Dockerfile
+    container_name: inveriq-trusted
+    depends_on:
+      - gateway
+    networks:
+      inveriq_lab:
+        ipv4_address: 10.77.0.60
+
+networks:
+  inveriq_lab:
+    name: inveriq_lab
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.77.0.0/24
