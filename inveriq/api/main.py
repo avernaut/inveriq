@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from inveriq import __release_tag__, __version__
 from inveriq.detection.detector import demo_bruteforce_event
 from inveriq.enforcement.nftables import build_plan
 from inveriq.intent.policy import load_policy
@@ -7,12 +8,17 @@ from inveriq.postverify.engine import simulate_post_verification
 from inveriq.response.generator import generate_candidates
 from inveriq.verification.engine import verify
 
-app = FastAPI(title="INVERIQ API", version="0.4.0")
+app = FastAPI(title="INVERIQ API", version=__version__)
 
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "product": "INVERIQ", "version": "0.4.0"}
+    return {
+        "status": "ok",
+        "product": "INVERIQ",
+        "version": __version__,
+        "release": __release_tag__,
+    }
 
 
 @app.get("/demo/bruteforce")
@@ -45,4 +51,5 @@ def brute_force_demo() -> dict:
         "enforcement": plan.__dict__ if plan else None,
         "post_verification": post.model_dump() if post else None,
         "demo_mode": "offline-safe",
+        "release": __release_tag__,
     }

@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCENARIO="${1:-brute-force}"
 
-echo "== INVERIQ v0.9.0 Expo RC =="
+echo "== INVERIQ v0.9.0-expo-rc2 =="
 echo "Scenario: $SCENARIO"
 
 docker compose -f docker-compose.lab.yml up --build -d

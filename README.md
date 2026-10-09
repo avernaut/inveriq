@@ -102,11 +102,11 @@ This separation is deliberate:
 
 ## Development status
 
-**v0.3.0 — Isolated enforcement lab**
+**v0.9.0-expo-rc2 — Expo RC hardening**
 
-Current repository contents establish the initial models, verification flow, policy representation, demo scenarios, dashboard skeleton, and enforcement adapter structure.
+The repository is in feature freeze for the IoT Tech Expo Europe 2026 demonstration. RC2 focuses on release correctness, reproducibility, and enforcement-input safety: synchronized release metadata, executable demo launchers, stricter mitigation-source validation, and CI regression coverage.
 
-The current milestone adds an isolated Docker lab with synthetic live traffic and real `nftables` enforcement inside the lab gateway only. The host firewall is never modified by the INVERIQ demo tooling.
+Real enforcement remains confined to the isolated Docker lab. The host firewall is never modified by the INVERIQ demo tooling. See [`docs/V0.9.0-EXPO-RC2.md`](docs/V0.9.0-EXPO-RC2.md) for the release notes.
 
 ## Ownership and confidentiality
 
@@ -194,7 +194,7 @@ INVERIQ v0.8.0 measures mitigation effectiveness using real traffic generated in
 
 ## Expo Release Candidate
 
-INVERIQ v0.9.0 is the feature-frozen IoT Tech Expo release candidate. See [`docs/V0.9.0.md`](docs/V0.9.0.md) and [`docs/EXPO_FREEZE.md`](docs/EXPO_FREEZE.md).
+INVERIQ `v0.9.0-expo-rc2` is the current feature-frozen IoT Tech Expo release candidate. See [`docs/V0.9.0-EXPO-RC2.md`](docs/V0.9.0-EXPO-RC2.md), [`docs/V0.9.0.md`](docs/V0.9.0.md), and [`docs/EXPO_FREEZE.md`](docs/EXPO_FREEZE.md).
 
 
 ## IoT Tech Expo Readiness

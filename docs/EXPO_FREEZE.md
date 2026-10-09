@@ -13,4 +13,4 @@ INVERIQ v0.9.0 is the feature-frozen Expo release candidate.
 
 ## Recommended tag
 
-`v0.9.0-expo-rc1`
+`v0.9.0-expo-rc2`
